@@ -1,0 +1,74 @@
+const html-webpack-plugin=require("html-webpack-plugin")
+module.exports={
+	entry:"app.js",
+	output:{
+	path:"文件输出路径",
+	filename:"输出文件名字",
+	}
+	module:{loaders:[
+	{test:/\.css$/,loader:"style-loader!css-loader!autoprefixer-loader"}                //打包css添加一个module属性
+	{test:/\.less$/,loader:"style-loader!css-loader!less-loader!autoprefixer-loader"}  //打包less添加一个module属性
+	{test:/\.scss$/,loader:"style-loader!css-loader!sass-loader!autoprefixer-loader"}  //打包less添加一个module属性
+	{test:/\.(jpg|png)$/,loader:"url-loader?limit=40000"}  //打包图片添加一个module属性
+	]},
+  plugins:[new hwp({
+  filename:"index.html",
+  template:"index1.html"
+  })]            
+}
+
+
+
+1.0   //在js中打包css  安装插件    安装 style-loader  css-loader      npm install style-loader css-loader -D (或者使用package.json)开发版本     我们在app.js入口文件中require(css文件)
+
+      //就可以将css以及js一起打包出来了         入口文件中就是  require(js)   require(css)  require(scss)  require(less)
+
+
+     //添加一个属性上去  module   test:表示正则表达式  以css文件结尾的文件    loader:表示用什么插件,用!分开  后面写的先加载
+
+
+     //使用autoprefixer-loader插件  自动添加浏览器内核   写在最后面,先添加内核名,接着就是打包
+
+
+1.1  //在js中打包less文件    安装插件  less 和 less-loader   将.css改为.less loader里面加上一个less-loader插件
+
+
+1.2   //在js中打包sass文件   安装插件  node-sass   sass-loader    将.css改为.scss loader里面加上一个sass-loader插件
+
+
+
+
+1.3   //打包图片进入js       安装插件 url-loader  file-loader  因为在css是url引用 一个url处理  一个文件处理   limit限制图片大小
+
+
+1.4   //产生的问题  修改代码后毒药打包一下才能测试, 打包后的代码和图片如果不在同一个目录下可能产生路径问题
+
+      //我们打包图片的时候是正确的路径然后我打包出去后,图片文件路径改变了
+
+      //安装webpack-dev-server 是一个基于node的express开发的服务器,  
+       
+      //全局安装 npm i -g webpack-dev-server  本地下载一个一下, npm i -D webpack-dev-server 
+
+      //--inline 自动刷新  --hot热加载  --open默认浏览器打开  port设置端口号 
+
+      //记得使用webpack-dev-server的时候path的路径不能使用相对路径 ./  需要使用 /根目录因为是根据服务器来的 默认打开index目录文件  
+
+      //我们直接用webpack-dev-server --inline --hot --open -port 3000  //还是需要依赖一个webpack  所以我们需要下载一个webpack  
+
+
+1.5  webpack-dev-server 使用的时候   //静态服务器插件         打包后的文件,和index.html放在一起 同级目录 所以我们在index.html里面引包就是src="app.js"
+
+      npm install -g webpack-dev-server  全局安装
+      npm install -D webpack-dev-server  本地安装
+      npm install -D webpack 热加载需要使用webpack服务
+      npm install -D html-webpack-plugin  //帮我们去构建一个html页面作为主页面,默认执行index.html
+
+      使用的时候就是webpack-dev-server --inline --hot --open --port 3001
+
+      记得这个时候会去产生一个服务器路径问题  path问题 我们将path改为绝对路径/ 因为现在是在服务器打开文件所以我们需要把路径改为服务器路径/跟目录,默认打开index.html文件
+
+
+
+
+
+
